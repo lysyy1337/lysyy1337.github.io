@@ -1,59 +1,77 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Сайт</title>
-    <style>
-        body { font-family: Arial; text-align: center; padding: 20px; }
-        .page { display: none; margin-top: 20px; border: 1px solid #000; padding: 20px; }
-        .page.active { display: block; }
-        .box { width: 100px; height: 100px; background: blue; color: white; line-height: 100px; margin: 10px auto; }
-        .circle { width: 100px; height: 100px; background: green; border-radius: 50%; margin: 10px auto; }
-    </style>
+<meta charset="UTF-8">
+<title>Сайт</title>
+<style>
+body { font-family: Arial; text-align: center; padding: 20px; }
+.page { display: none; margin-top: 20px; padding: 20px; border: 1px solid #000; }
+.page.active { display: block; }
+.api-box { background: #eee; padding: 10px; margin: 10px auto; max-width: 300px; }
+</style>
 </head>
 <body>
+<button onclick="show('p1')">Биография</button>
+<button onclick="show('p2')">API</button>
+<button onclick="show('p3')">Магия</button>
 
-    <button onclick="show('p1')">Стр 1</button>
-    <button onclick="show('p2')">Стр 2</button>
-    <button onclick="show('p3')">Стр 3</button>
+<div id="p1" class="page active">
+<h2>Обо мне</h2>
+<p>Меня зовут Алексей. Мне 19 лет. Я учусь на программиста и интересуюсь веб-разработкой. В свободное время люблю играть в компьютерные игры и слушать музыку. Всегда стараюсь узнавать что-то новое и развиваться в IT-сфере.</p>
+<p>Нажми на клавишу B</p>
+</div>
 
-    <div id="p1" class="page active">
-        <div id="box" class="box">Наведи</div>
-    </div>
+<div id="p2" class="page">
+<h2>Запрос к API</h2>
+<div id="apiResult" class="api-box">Тут будет шутка...</div>
+<button onclick="getJoke()">Получить шутку</button>
+<p>Нажми на клавишу C</p>
+</div>
 
-    <div id="p2" class="page">
-        <div id="circle" class="circle"></div>
-    </div>
+<div id="p3" class="page">
+<h2>Магия</h2>
+<button id="magicBtn">Нажми на меня</button>
+<p id="magicText">Текст</p>
+<p>Нажми на клавишу D</p>
+</div>
 
-    <div id="p3" class="page">
-        <button id="btn">Клик</button>
-        <p id="txt">Текст</p>
-    </div>
+<script>
+function show(id) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+}
 
-    <script>
-        function show(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-        }
+document.onkeydown = (e) => {
+    let key = e.key.toLowerCase();
+    if (key === 'b') {
+        document.querySelector('body').style.background = 'lightblue';
+    }
+    if (key === 'c') {
+        getJoke();
+    }
+    if (key === 'd') {
+        document.getElementById('magicText').innerText = 'Текст';
+        document.getElementById('magicText').style.color = 'black';
+        document.getElementById('magicBtn').style.background = '';
+    }
+};
 
-        let box = document.getElementById('box');
-        box.onmouseenter = () => box.style.background = 'red';
-        box.onmouseleave = () => box.style.background = 'blue';
+function getJoke() {
+    let box = document.getElementById('apiResult');
+    box.innerText = 'Загрузка...';
+    fetch('https://official-joke-api.appspot.com/random_joke')
+        .then(res => res.json())
+        .then(data => box.innerText = data.setup + ' ... ' + data.punchline)
+        .catch(() => box.innerText = 'Ошибка');
+}
 
-        let circle = document.getElementById('circle');
-        let btn = document.getElementById('btn');
-        let txt = document.getElementById('txt');
-
-        document.onkeydown = (e) => {
-            if (e.code === 'Space') circle.style.background = 'red';
-            if (e.key.toLowerCase() === 'a') txt.innerText = 'Нажата А';
-        };
-        
-        document.onkeyup = (e) => {
-            if (e.code === 'Space') circle.style.background = 'green';
-        };
-
-        btn.onclick = () => txt.innerText = 'Клик!';
-    </script>
+let magicBtn = document.getElementById('magicBtn');
+let magicText = document.getElementById('magicText');
+magicBtn.onclick = () => {
+    magicText.innerText = 'Магия сработала!';
+    magicText.style.color = 'green';
+    magicBtn.style.background = 'green';
+};
+</script>
 </body>
 </html>
