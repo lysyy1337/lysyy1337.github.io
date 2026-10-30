@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Сайт</title>
+    <style>
+        body { font-family: Arial; text-align: center; padding: 20px; }
+        .page { display: none; margin-top: 20px; border: 1px solid #000; padding: 20px; }
+        .page.active { display: block; }
+        .box { width: 100px; height: 100px; background: blue; color: white; line-height: 100px; margin: 10px auto; }
+        .circle { width: 100px; height: 100px; background: green; border-radius: 50%; margin: 10px auto; }
+    </style>
+</head>
+<body>
+
+    <button onclick="show('p1')">Стр 1</button>
+    <button onclick="show('p2')">Стр 2</button>
+    <button onclick="show('p3')">Стр 3</button>
+
+    <div id="p1" class="page active">
+        <div id="box" class="box">Наведи</div>
+    </div>
+
+    <div id="p2" class="page">
+        <div id="circle" class="circle"></div>
+    </div>
+
+    <div id="p3" class="page">
+        <button id="btn">Клик</button>
+        <p id="txt">Текст</p>
+    </div>
+
+    <script>
+        function show(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+
+        let box = document.getElementById('box');
+        box.onmouseenter = () => box.style.background = 'red';
+        box.onmouseleave = () => box.style.background = 'blue';
+
+        let circle = document.getElementById('circle');
+        let btn = document.getElementById('btn');
+        let txt = document.getElementById('txt');
+
+        document.onkeydown = (e) => {
+            if (e.code === 'Space') circle.style.background = 'red';
+            if (e.key.toLowerCase() === 'a') txt.innerText = 'Нажата А';
+        };
+        
+        document.onkeyup = (e) => {
+            if (e.code === 'Space') circle.style.background = 'green';
+        };
+
+        btn.onclick = () => txt.innerText = 'Клик!';
+    </script>
+</body>
+</html>
